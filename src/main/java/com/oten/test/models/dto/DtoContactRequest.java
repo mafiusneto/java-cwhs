@@ -2,7 +2,7 @@ package com.oten.test.models.dto;
 
 public record DtoContactRequest (String firstName, String lastName, String email){}
 
-// TODO add mais campos
+// TODO add mais campos, vou deixar esse lixo proposital
 /* 
     "firstname": "%s",
     "lastname": "%s",

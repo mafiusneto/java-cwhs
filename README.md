@@ -79,6 +79,9 @@ Paths de exemplo para receber as notificações de webhook, onde o tipo do event
 
 ```bash
 mvn clean install
+# -- com bash -- na pasta raiz da aplicação
+./mvnw spring-boot:run
+# -- com windows --
 mvnw spring-boot:run
 ```
 Aplicação será iniciada em: http://localhost:8080
@@ -87,3 +90,49 @@ Aplicação será iniciada em: http://localhost:8080
 - https://br.developers.hubspot.com/docs/guides/apps/authentication/oauth-quickstart-guide
 - https://br.developers.hubspot.com/docs/guides/api/crm/objects/contacts
 
+### Step-by-spep
+
+##### Visão macro
+- preencher configuração application.yml
+- Startar a aplicação
+- No browser acessar o link de authorize, selecionar a conta/user tester se pedir e obter o token, copia access_token.
+- Em algum path de contact, por exemplo listar, add no header da consulta: key:Authorization em value: "Bearer {access_token}"
+- e voala deve exibir sua consulta
+
+
+##### Visão micro
+- preencher as configurações em application.yml na parte de hubspot.
+Os dados são obtidos no hubspot na aplicação e o user-id na conta tester.
+> aplication.yml
+>> hubspot:
+>>>  user-id: 123456 # opcional - user-tester
+>>>  client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+>>>  client-secret: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx
+>>>  redirect-uri: {url-redirect-na-aplicacao}
+>>>  scopes: {scopo da aplicacao}
+
+- Startar a aplicação
+Na pasta raiz da aplicação executar o comando <code>./mvnw spring-boot:run</code>
+- No browser acessar o link de authorize
+http://localhost:8080/oauth/authorize
+- selecionar a conta ou usuario de teste se pedir e confirme 
+- Apos a confirmação a aplicação irá redirecionar internamente para o path de callback, que valida com o secret informado
+- Após a etapa anterior deve ser exibida os dados de token.
+access_token - é o token usado nas consultas
+o refresh_token pode ser usado em para pegar um novo token quando expirar http://localhost:8080/oauth/refresh?code={refresh_token} 
+- Com o acess_token copiado add no header das consultas da aplicação.
+
+```bash
+# Exemplo consulta
+curl --location 'http://localhost:8080/crm/contacts' \
+--header 'Authorization: Bearer {acess_token}' \
+--header 'Content-Type: application/json'
+```
+
+### Melhorias possíveis
+Considerando um scopo completo.
+- Como é um teste deixei em uma arquitetura MVC, mas só pelo tamanho do CRM uma arquitetura hexagonal se encaixa.
+- Estrutural - Separação de responsabilidades dos microserviços, com microserviços especializados.
+ex.  cadastros ou só crm, autenticação, logs, gateway, segurança da aplicação é não só do hubspot.
+- No caso de webhook ou outro fluxo por evento, usar strategy para separar e definir ações por tipo do evento.
+- Testes unitários não teve, apessar de ter a dependencia.
