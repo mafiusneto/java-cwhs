@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: test
+hubspot:
+  user-id: ${HUBSPOT_USERID} # opcional - user-tester
+  client-id: ${HUBSPOT_CLIENT_ID:xxxxxxx}
+  client-secret: ${HUBSPOT_CLIENT_SECRET:xxxxxxx}
+  redirect-uri: http://localhost:8080/oauth/callback
+  scopes: crm.objects.contacts.write%20oauth%20crm.objects.contacts.read
