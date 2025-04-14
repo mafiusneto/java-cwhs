@@ -47,6 +47,51 @@ public class HubspotContactService {
     }
 
     
+    public ResponseEntity<String> updateContact(String token, String id, DtoContactRequest contact) {
+        ///crm/v3/objects/contacts/{email}?idProperty=email outra opção
+        //https://developers.hubspot.com/docs/guides/api/crm/objects/contacts#update-contacts
+        // String payntact.firstName(), contact.lastName(), contact.email());
+
+        String payload = """
+        {
+          "properties": {
+            "favorite_food": "burger",
+            "jobtitle": "Manager",
+            "lifecyclestage": "Customer"
+          }
+        }
+        """;
+
+        String url = URL_BASE + "/" + id;
+        return exchangeWithToken(token, url, HttpMethod.PATCH, payload);
+    }
+
+    
+    public ResponseEntity<String> deleteContact(String token, String id) {
+        // "error": "Erro na requisição: 415 UNSUPPORTED_MEDIA_TYPE"
+
+        String url = URL_BASE + "/" + id;
+        return exchangeWithToken(token, url, HttpMethod.DELETE, null);
+        // HttpHeaders headers = new HttpHeaders();
+        // headers.set("Authorization", "Bearer " + token);
+        // // headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        // headers.setAccept(List.of(MediaType.ALL));
+        // HttpEntity<Void> entity = new HttpEntity<>(headers);
+        
+        // return restTemplate.exchange(url, HttpMethod.DELETE, entity, String.class);
+
+        // onde achar os parametros?
+        // String payload = """
+        // {
+        // "idProperty": "id",
+        // "objectId": "%s"
+        // }
+        // """.formatted(id);
+        // String url = URL_BASE + "/gdpr-delete";
+        // return exchangeWithToken(token, url, HttpMethod.POST, payload);
+    }
+
+    // TODO add em lote?
     private ResponseEntity<String> exchangeWithToken(String token, String url, HttpMethod method, String body) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);

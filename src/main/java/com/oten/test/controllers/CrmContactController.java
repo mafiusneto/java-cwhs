@@ -52,6 +52,20 @@ public class CrmContactController {
         return service.createContact(stripBearer(token), contact);
     }
 
+    @PatchMapping("/contact/{id}")
+    public ResponseEntity<String> update(@RequestHeader("Authorization") String token,
+                                         @PathVariable String id,
+                                         @RequestBody DtoContactRequest contact) {
+        System.out.println("updateContact- id:" +id);
+        return service.updateContact(stripBearer(token), id, contact);
+    }
+
+    @DeleteMapping("/contact/{id}")
+    public ResponseEntity<String> delete(@RequestHeader("Authorization") String token, @PathVariable String id) {
+        System.out.println("deleteContact- id:" +id);
+        return service.deleteContact(stripBearer(token), id);
+    }
+
     private String stripBearer(String header) {
         return header.replace("Bearer ", "").trim();
     }
