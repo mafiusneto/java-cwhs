@@ -1,11 +1,12 @@
 # java-cwhs
 
-Projeto em java de integração com HubSpot.  
+Projeto em Java de integração com HubSpot.  
+cwhs- communication with hubspot
 
 ### Requisitos
 - Java 17+
 - Spring Boot 3+
-- Token OAuth 2.0 do HubSpot com escopo: 
+- Token OAuth 2.0 do HubSpot com os seguintes escopos: 
 `crm.objects.contacts.write oauth crm.objects.contacts.read`
 
 ### Paths
@@ -15,16 +16,16 @@ Paths da aplicação
 ###### *Health*
 - Health
 http://localhost:8080/health
-Path para avaliar saúde do serviço(se on), pode ser add versão ou outra referência útil.
+Path para avaliar saúde do serviço (se ativo), pode ser adicionada a versão ou outra referência útil.
 
 
 ###### *Autenticação*
 - Authorize
 http://localhost:8080/oauth/authorize 
-Referente para autenticação da conta. Onde recebe um código e redireciona para o path de callback.
+Responsável pela autenticação da conta. Recebe um código e redireciona para o path de callback.
 *Onde se o id da conta não estiver parametrizado vai solicitar a seleção pelo operador.
-*Mas se estiver parametrizado pula a etapa da seleção de conta. (*user-id)
-*Para teste, recomendado executar no browser, e validar se não tem algum bloqueio como de pop.
+*Mas se estiver parametrizado pula essa etapa da seleção de conta. (*user-id)
+*Para teste, recomenda-se executar no navegador, e validar se não tem algum bloqueio como de pop.
 
 - Callback
 http://localhost:8080/oauth/callback
@@ -44,7 +45,7 @@ curl --location 'http://localhost:8080/crm/contacts' \
 --header 'Content-Type: application/json'
 ```
 
-- Buscar contato por id
+- Buscar contato por ID
 GET http://localhost:8080/crm/contact/{id}
 
 ```bash
@@ -65,12 +66,12 @@ curl --location 'http://localhost:8080/crm/contact' \
 - Atualizar contato
 (Em desenvolvimento)
 
-- Delete contato
+- Excluir contato
 (Em desenvolvimento)
 
 ###### *Webhook*
 
-Paths de exemplo para receber as notificações de webhook, onde o tipo do evento que indica qual fluxo seguir. *Sem comportamento definido.
+Paths de exemplo para receber as notificações de webhook, onde o tipo do evento que indica qual fluxo seguir. *(Sem comportamento definido até o momento.)*
 
 - POST http://localhost:8080/notification *(recomentado)*
 - GET http://localhost:8080/notification?type={type-event}&ref={info-reference}
@@ -90,36 +91,37 @@ Aplicação será iniciada em: http://localhost:8080
 - https://br.developers.hubspot.com/docs/guides/apps/authentication/oauth-quickstart-guide
 - https://br.developers.hubspot.com/docs/guides/api/crm/objects/contacts
 
-### Step-by-spep
+### Step-by-step
 
 ##### Visão macro
 - preencher configuração application.yml
-- Startar a aplicação
+- Iniciar a aplicação
 - No browser acessar o link de authorize, selecionar a conta/user tester se pedir e obter o token, copia access_token.
-- Em algum path de contact, por exemplo listar, add no header da consulta: key:Authorization em value: "Bearer {access_token}"
-- e voala deve exibir sua consulta
+- Em algum path de contact, por exemplo listar, adicione no header da consulta: key:Authorization em value: "Bearer {access_token}"
+- e pronto deve exibir os dados consultados.
 
 
 ##### Visão micro
 - preencher as configurações em application.yml na parte de hubspot.
-Os dados são obtidos no hubspot na aplicação e o user-id na conta tester.
-> aplication.yml
->> hubspot:
->>>  user-id: 123456 # opcional - user-tester
->>>  client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
->>>  client-secret: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx
->>>  redirect-uri: {url-redirect-na-aplicacao}
->>>  scopes: {scopo da aplicacao}
-
-- Startar a aplicação
+Estes dados são obtidos na aplicação no hubspot e o user-id na conta tester.
+```
+# aplication.yml
+hubspot:
+  user-id: 123456 # opcional - user-tester
+  client-id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+  client-secret: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx
+  redirect-uri: {url-redirect-na-aplicacao}
+  scopes: {scopo da aplicacao}
+```
+- Iniciar a aplicação
 Na pasta raiz da aplicação executar o comando <code>./mvnw spring-boot:run</code>
 - No browser acessar o link de authorize
 http://localhost:8080/oauth/authorize
-- selecionar a conta ou usuario de teste se pedir e confirme 
-- Apos a confirmação a aplicação irá redirecionar internamente para o path de callback, que valida com o secret informado
-- Após a etapa anterior deve ser exibida os dados de token.
-access_token - é o token usado nas consultas
-o refresh_token pode ser usado em para pegar um novo token quando expirar http://localhost:8080/oauth/refresh?code={refresh_token} 
+- Selecionar a conta ou usuario de teste se pedir e confirme 
+- Após a confirmação a aplicação irá redirecionar internamente para o path de callback, que valida com o secret informado
+- Após a etapa anterior, os dados do token devem ser exibidos.
+access_token - é o token usado nas consultas.
+refresh_token pode ser usado em para pegar um novo token quando expirar. http://localhost:8080/oauth/refresh?code={refresh_token} 
 - Com o acess_token copiado add no header das consultas da aplicação.
 
 ```bash
@@ -130,9 +132,11 @@ curl --location 'http://localhost:8080/crm/contacts' \
 ```
 
 ### Melhorias possíveis
-Considerando um scopo completo.
-- Como é um teste deixei em uma arquitetura MVC, mas só pelo tamanho do CRM uma arquitetura hexagonal se encaixa.
+Considerando um escopo completo.
+- Como é um teste deixei em uma arquitetura MVC, mas só pelo tamanho do CRM além da complexidade e a possibilidade de mudança da aplicação uma arquitetura hexagonal se encaixa.
 - Estrutural - Separação de responsabilidades dos microserviços, com microserviços especializados.
-ex.  cadastros ou só crm, autenticação, logs, gateway, segurança da aplicação é não só do hubspot.
+ex.  cadastros ou só crm, autenticação, logs, gateway, segurança da aplicação em si e não só do hubspot.
 - No caso de webhook ou outro fluxo por evento, usar strategy para separar e definir ações por tipo do evento.
-- Testes unitários não teve, apessar de ter a dependencia.
+- Testes unitários não teve, apessar de ter a dependência.
+- Add logs adequados para análises (pfv desconsiderem meus sysouts)
+- Adicionar Swagger ou outra forma de documentação.
