@@ -1,4 +1,4 @@
-package com.oten.test.services;
+package com.oten.test.domain.services;
 
 import java.util.Collections;
 
@@ -10,10 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.oten.test.models.dto.DtoContactRequest;
+import com.oten.test.domain.models.dto.DtoContactRequest;
+import com.oten.test.ports.out.HubspotContactServicePort;
 
 @Service
-public class HubspotContactService {
+public class HubspotContactService implements HubspotContactServicePort {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final String URL_BASE = "https://api.hubapi.com/crm/v3/objects/contacts";

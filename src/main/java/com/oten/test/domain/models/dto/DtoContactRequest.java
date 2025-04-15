@@ -1,4 +1,4 @@
-package com.oten.test.models.dto;
+package com.oten.test.domain.models.dto;
 
 public record DtoContactRequest (String firstName, String lastName, String email){}
 

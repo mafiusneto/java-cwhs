@@ -1,11 +1,10 @@
-package com.oten.test.controllers;
+package com.oten.test.adapters.out.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oten.test.models.dto.DtoContactRequest;
-import com.oten.test.services.HubspotContactService;
-
+import com.oten.test.domain.models.dto.DtoContactRequest;
+import com.oten.test.ports.out.HubspotContactServicePort;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @RequestMapping("/crm")
 public class CrmContactController {
 
-    private final HubspotContactService service;
+    private final HubspotContactServicePort service;
 
-    public CrmContactController(HubspotContactService service) {
+    public CrmContactController(HubspotContactServicePort service) {
         this.service = service;
     }
 
