@@ -1,4 +1,4 @@
-package com.oten.test.controllers;
+package com.oten.test.adapters.out.controllers;
 
 import java.util.HashMap;
 import java.util.Map;

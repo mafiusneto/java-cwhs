@@ -1,4 +1,4 @@
-package com.oten.test.infra.exception;
+package com.oten.test.domain.core.infra.exception;
 
 import java.util.HashMap;
 import java.util.Map;

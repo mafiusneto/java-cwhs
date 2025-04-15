@@ -1,4 +1,4 @@
-package com.oten.test.controllers;
+package com.oten.test.adapters.out.controllers;
 
 import java.net.URI;
 
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.oten.test.models.HubspotOAuthConfig;
+import com.oten.test.domain.models.HubspotOAuthConfig;
 
 import lombok.RequiredArgsConstructor;
 

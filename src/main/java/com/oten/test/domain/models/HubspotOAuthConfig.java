@@ -1,4 +1,4 @@
-package com.oten.test.models;
+package com.oten.test.domain.models;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
